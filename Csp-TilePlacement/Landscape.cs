@@ -4,7 +4,7 @@ namespace Csp_TilePlacement
 {
     public class Landscape
     {
-        public List<List<int>> Layout { get; set; }
+        public int[][] Layout { get; set; }
         public Dictionary<string, int> Tiles { get; set; }
         public Dictionary<string, int> Target { get; set; }
 
@@ -65,14 +65,13 @@ namespace Csp_TilePlacement
             {
                 Tiles = tiles,
                 Target = target,
-                Layout = layout
+                Layout = layout.Select(x => x.ToArray()).ToArray()   
             };
 
 
         }
 
-
-            public static List<int> Tokenize(string line)
+        public static List<int> Tokenize(string line)
             {
                 var result = new List<int>();
                 for (int i = 0; i < line.Length; i += 2)
@@ -84,6 +83,8 @@ namespace Csp_TilePlacement
 
                 }
                 return result;
-            } 
-        }
+            }
+
+      
+    }
 }

@@ -3,24 +3,18 @@ namespace Csp_TilePlacement
 {
     internal static class Helpers
     {
-
-      
-
-        public static Dictionary<string,int> CountColors(List<List<int>> layout)
+        public static int[][] CopyLayout( this int[][] tobeCopied)
         {
-            var result = new Dictionary<string,int>();
+            return tobeCopied.Select(x => x.ToArray()).ToArray();
+        }
 
-            for (int i = 0; i < layout.Count; i++)
-            {
-                for (int j = 0; j < layout[i].Count; j++)
-                {
-                    if (result.ContainsKey(layout[i][j].ToString()))
-                        result[layout[i][j].ToString()]++;
-                    else
-                        result.Add(layout[i][j].ToString(), 1);
-                }
-            }
+        public static T[] SubArray<T>(this T[] array, int offset, int length)
+        {
+            T[] result = new T[length];
+            Array.Copy(array, offset, result, 0, length);
             return result;
         }
+
+
     }
 }
