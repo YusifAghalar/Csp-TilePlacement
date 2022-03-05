@@ -2,7 +2,7 @@
   "profiles": {
     "Csp-TilePlacement": {
       "commandName": "Project",
-      "commandLineArgs": "./Input/input1.txt"
+      "commandLineArgs": "./Input/1.txt"
     }
   }
 }

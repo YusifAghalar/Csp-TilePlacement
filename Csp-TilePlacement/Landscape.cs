@@ -10,17 +10,14 @@ namespace Csp_TilePlacement
 
         public static Landscape Build(string text)
         {
-            text = text.Replace("\r", "").Trim();
+            text = text.Replace("\r", "");
             var sections = new List<string>() { "landscape", "tiles", "targets" };
             int cnt = -2;
             var lines = text.Split("\n");
 
             var layout = new List<List<int>>();
-            var tiles= new Dictionary<string, int>();
-            var target= new Dictionary<string, int>();
-
-         
-            
+            var tiles = new Dictionary<string, int>();
+            var target = new Dictionary<string, int>();
 
             tiles.Add("OUTER_BOUNDARY", Convert.ToInt32(Regex.Match(text, "OUTER_BOUNDARY=(?<g>\\d*)").Groups.GetValueOrDefault("g").Value));
             tiles.Add("EL_SHAPE", Convert.ToInt32(Regex.Match(text, "EL_SHAPE=(?<g>\\d*)").Groups.GetValueOrDefault("g").Value));
@@ -39,7 +36,7 @@ namespace Csp_TilePlacement
                 if (cnt == 4)
                     break;
 
-               
+
 
                 var currentSection = sections[cnt];
                 switch (currentSection)
@@ -51,7 +48,7 @@ namespace Csp_TilePlacement
                         break;
 
                     case "targets":
-                        var words = line.Split(":",StringSplitOptions.RemoveEmptyEntries);
+                        var words = line.Split(":", StringSplitOptions.RemoveEmptyEntries);
                         target.Add(words[0], Convert.ToInt32(words[1]));
                         break;
 
@@ -60,31 +57,46 @@ namespace Csp_TilePlacement
                 }
 
             }
-
-            return new Landscape()
+        
+            var result=  new Landscape()
             {
                 Tiles = tiles,
                 Target = target,
-                Layout = layout.Select(x => x.ToArray()).ToArray()   
+                Layout = layout.Select(x => x.ToArray()).ToArray()
             };
+            result.Layout=AddAdditionalZeros(result.Layout);
+            return result;
+            
 
 
         }
 
         public static List<int> Tokenize(string line)
+        {
+            var result = new List<int>();
+            for (int i = 0; i < line.Length; i += 2)
             {
-                var result = new List<int>();
-                for (int i = 0; i < line.Length; i += 2)
-                {
-                    if (line[i] == ' ')
-                        result.Add(0);
-                    else
-                        result.Add(Convert.ToInt32(line[i].ToString()));
+                if (line[i] == ' ')
+                    result.Add(0);
+                else
+                    result.Add(Convert.ToInt32(line[i].ToString()));
 
-                }
-                return result;
             }
+            return result;
+        }
 
-      
+        public static int[][]AddAdditionalZeros(int[][] arr) { 
+            var maxLenght=arr.Max(x=> x.Length);
+            for (int i = 0; i < arr.Length; i++)
+            {
+                while (arr[i].Length < maxLenght)
+                {
+                    arr[i]= arr[i].Append(0).ToArray();
+                }
+            }
+            return arr;
+        }
+
+
     }
 }
