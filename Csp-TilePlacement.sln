@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Csp-TilePlacement", "Csp-TilePlacement\Csp-TilePlacement.csproj", "{BD43348B-80B3-4B95-ACEB-3DD644EF19CD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD43348B-80B3-4B95-ACEB-3DD644EF19CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD43348B-80B3-4B95-ACEB-3DD644EF19CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD43348B-80B3-4B95-ACEB-3DD644EF19CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD43348B-80B3-4B95-ACEB-3DD644EF19CD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AA6618A4-8F2B-4660-A1D7-6993DAB9670B}
+	EndGlobalSection
+EndGlobal
