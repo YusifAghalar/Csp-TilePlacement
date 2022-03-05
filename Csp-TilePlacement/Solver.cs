@@ -24,10 +24,23 @@ namespace Csp_TilePlacement
         {
             counter++;
             if (HasFoundSolution())
+            {
+                foreach (var i in Landscape.Layout)
+                {
+                    foreach (var j in i)
+                    {
+                        if (j == -1) Console.Write("# ");
+                        else Console.Write(j + " ");
+                    }
+
+                    Console.WriteLine();
+                }
+
                 return true;
+            }
 
 
-            foreach (var tileKey in Landscape.Tiles.OrderBy(x=>x.Value).Select(x=>x.Key))
+            foreach (var tileKey in Landscape.Tiles.Keys)
             {
                 if (Landscape.Tiles[tileKey] == 0)
                     continue;
@@ -42,20 +55,17 @@ namespace Csp_TilePlacement
                     else Solution.Add($"{x}-{y}", tileKey);
 
                     (int oldX, int oldY) = (x, y);
-                    (x,y)= NextLocation(oldX, oldY);
+                    (x, y) = NextLocation(oldX, oldY);
                     if (Solve(x, y)) return true;
-                    (x,y)=(oldX, oldY);
+                    (x, y) = (oldX, oldY);
                     Landscape.Layout = temp;
                     Landscape.Tiles[tileKey] += 1;
-
                 }
-
             }
 
 
             return false;
         }
-
 
 
         public bool HasFoundSolution()
@@ -66,8 +76,8 @@ namespace Csp_TilePlacement
             {
                 if (currentColors[item] != Landscape.Target[item])
                     return false;
-
             }
+
             return true;
         }
 
@@ -80,86 +90,71 @@ namespace Csp_TilePlacement
             {
                 for (int j = 0; j < layout[i].Length; j++)
                 {
-                    if(layout[i][j] <1 ) continue;
+                    if (layout[i][j] < 1) continue;
                     if (result.ContainsKey(layout[i][j].ToString()))
                         result[layout[i][j].ToString()]++;
                     else
                         result.Add(layout[i][j].ToString(), 1);
                 }
             }
+
             return result;
         }
 
         public bool IsPossibleToPutTile(string tileName, int[][] layout, int x, int y)
         {
-
             var nextLayout = PutTile(tileName, layout, x, y);
             var currentBushes = ScanBushes(nextLayout);
             foreach (var item in currentBushes.Keys)
             {
                 if (currentBushes[item] < Landscape.Target[item])
                     return false;
-
             }
-            return true;
 
+            return true;
         }
 
 
         public int[][] PutTile(string tileName, int[][] currentLayout, int x, int y)
         {
-            var temp = currentLayout.CopyLayout();
-            var square = temp[x..(x + 4)];
-
-            var row1 = square[0][y..(y + 4)];
-            var row2 = square[1][y..(y + 4)];
-            var row3 = square[2][y..(y + 4)];
-            var row4 = square[3][y..(y + 4)];
-
+          
             switch (tileName)
             {
                 case "OUTER_BOUNDARY":
-                    Fill(ref row1, "all");
+                    Array.Fill(currentLayout[x], -1, y, 4);
+                    currentLayout[x + 1][y] = -1;
+                    currentLayout[x + 1][y + 3] = -1;
 
-                    Fill(ref row2, "sides");
+                    currentLayout[x + 2][y] = -1;
+                    currentLayout[x + 2][y + 3] = -1;
 
-                    Fill(ref row3, "sides");
+                    Array.Fill(currentLayout[x+3], -1, y, 4);
+                    return currentLayout;
 
-                    Fill(ref row4, "all");
-
-                    break;
                 case "EL_SHAPE":
-                    Fill(ref row1, "all");
+                    Array.Fill(currentLayout[x], -1, y, 4);
 
-                    Fill(ref row2, "start");
+                    currentLayout[x + 1][y] = -1;
 
-                    Fill(ref row3, "start");
+                    currentLayout[x + 2][y] = -1;
 
-                    Fill(ref row4, "start");
-
-                    break;
+                    currentLayout[x + 3][y] = -1;
+                    return currentLayout;
+  
                 case "FULL_BLOCK":
-                    Fill(ref row1, "all");
+                    Array.Fill(currentLayout[x], -1, y, 4);
 
-                    Fill(ref row2, "all");
+                    Array.Fill(currentLayout[x+1], -1, y, 4);
 
-                    Fill(ref row3, "all");
+                    Array.Fill(currentLayout[x+2], -1, y, 4);
 
-                    Fill(ref row4, "all");
+                    Array.Fill(currentLayout[x+3], -1, y, 4);
+                    return currentLayout;
 
-                    break;
-
-                default:
-                    break;
             }
-           
-            Array.Copy(row1, 0, temp[x], y, 4);
-            Array.Copy(row2, 0, temp[x+1], y, 4);
-            Array.Copy(row3, 0, temp[x+2], y, 4);
-            Array.Copy(row4, 0, temp[x+3], y, 4);
-          
-            return temp;
 
+
+            return currentLayout;
         }
 
 
@@ -168,12 +163,12 @@ namespace Csp_TilePlacement
             switch (method)
             {
                 case "all":
-                    {
-                        for (int i = 0; i < arr.Length; i++)
+                {
+                    for (int i = 0; i < arr.Length; i++)
 
-                            arr[i] = -1;
-                        break;
-                    }
+                        arr[i] = -1;
+                    break;
+                }
 
                 case "start":
                     arr[0] = -1;
@@ -201,8 +196,8 @@ namespace Csp_TilePlacement
                     x += 4;
                 }
             }
+
             return (x, y);
         }
-
     }
 }

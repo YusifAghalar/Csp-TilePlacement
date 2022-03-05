@@ -1,7 +1,4 @@
-﻿
-
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace Csp_TilePlacement
 {

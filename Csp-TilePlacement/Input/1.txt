@@ -1,4 +1,4 @@
-﻿# Tiles Problem, generated at: Tue Feb 16 23:27:21 EST 2021
+# Tiles Problem, generated at: Tue Feb 16 23:27:21 EST 2021
 # Landscape
 2 2 1 3   3 4   4 2 2 4   4       2 4 3
   2 1 3 2 2       1   1 2 2   2 3 4 4 4
