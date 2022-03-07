@@ -13,11 +13,12 @@ namespace Csp_TilePlacement
           
             var landscape = Landscape.Build(File.ReadAllText(args[0]));
             var solver= new Solver(landscape);
-            var result = solver.Solve(0,0);
+            var result = solver.Solve(landscape.Squares.FirstOrDefault());
             if (!result)
             {
 
                 Console.WriteLine("Unsolved");
+                Console.WriteLine(solver.counter);
                 return;
             }
                
@@ -28,7 +29,7 @@ namespace Csp_TilePlacement
             }
             sp.Stop();
             Console.WriteLine(sp.ElapsedMilliseconds);
-            Console.WriteLine(solver.counter);
+         
 
 
             

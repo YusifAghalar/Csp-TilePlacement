@@ -4,9 +4,17 @@ namespace Csp_TilePlacement
 {
     public class Landscape
     {
+        public Landscape()
+        {
+            Layout =new int[4][];
+            AvailableTiles = new Dictionary<string, int> {};
+            Target  =new Dictionary<string, int>{};
+            Squares=new List<Square>();
+        }
         public int[][] Layout { get; set; }
-        public Dictionary<string, int> Tiles { get; set; }
+        public Dictionary<string, int> AvailableTiles { get; set; }
         public Dictionary<string, int> Target { get; set; }
+        public List<Square> Squares { get; set; }
 
         public static Landscape Build(string text)
         {
@@ -15,7 +23,7 @@ namespace Csp_TilePlacement
             int cnt = -2;
             var lines = text.Split("\n");
 
-            var layout = new List<List<int>>();
+            var map = new List<List<int>>();
             var tiles = new Dictionary<string, int>();
             var target = new Dictionary<string, int>();
 
@@ -44,7 +52,7 @@ namespace Csp_TilePlacement
                     case "landscape":
                         var temp = new List<int>();
                         temp.AddRange(Tokenize(line));
-                        layout.Add(temp);
+                        map.Add(temp);
                         break;
 
                     case "targets":
@@ -58,14 +66,17 @@ namespace Csp_TilePlacement
 
             }
         
-            var result=  new Landscape()
+
+            
+            var landscape=  new Landscape()
             {
-                Tiles = tiles,
+                AvailableTiles = tiles,
                 Target = target,
-                Layout = layout.Select(x => x.ToArray()).ToArray()
+                Layout = map.Select(x => x.ToArray()).ToArray()
             };
-            result.Layout=AddAdditionalZeros(result.Layout);
-            return result;
+            landscape.Layout=AddAdditionalZeros(landscape.Layout);
+            landscape.FillSquares();
+            return landscape;
             
 
 
@@ -95,6 +106,39 @@ namespace Csp_TilePlacement
                 }
             }
             return arr;
+        }
+
+        public void FillSquares()
+        {
+         
+            var size = Layout.Length;
+            var totalSquares = (size*size / 16);
+
+            var row = 0;
+            var column = 0;
+
+            var index=1;
+          
+
+            for (row = 0; row < size; row+=4)
+            {
+                for (column = 0; column< size; column+=4)
+                {
+                    var newSquare = new Square() { X = row, Y = column, Number = index };
+
+
+
+                    Array.Copy(Layout, row, newSquare.State.Data, 0, 4);
+                    for (int i = 0; i < newSquare.State.Data.Length; i++)
+                        newSquare.State.Data[i] = newSquare.State.Data[i].Skip(column).Take(4).ToArray();
+                    
+                    Squares.Add(newSquare);
+                    index++;
+                }
+            }
+          ;
+
+
         }
 
 
