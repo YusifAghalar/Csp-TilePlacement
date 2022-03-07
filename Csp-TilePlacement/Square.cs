@@ -18,11 +18,13 @@ namespace Csp_TilePlacement
             Y= square.Y;
             Number = square.Number;
             State = square.State;
+            Original = square.State;
             AssignedTile = new string(square.AssignedTile);
         }
         public int X { get; set; }
         public int Y { get; set; }
         public int Number { get; set; }
+        public State Original { get; set; }
 
         public State State { get; set; }
      
@@ -103,7 +105,7 @@ namespace Csp_TilePlacement
 
         public void Revert()
         {
-            State = State.Previous;
+            State = Original;
             AssignedTile = null;
         }
     }

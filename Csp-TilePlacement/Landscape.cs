@@ -76,6 +76,7 @@ namespace Csp_TilePlacement
             };
             landscape.Layout=AddAdditionalZeros(landscape.Layout);
             landscape.FillSquares();
+            
             return landscape;
             
 
@@ -126,12 +127,14 @@ namespace Csp_TilePlacement
                 {
                     var newSquare = new Square() { X = row, Y = column, Number = index };
 
-
+                    
 
                     Array.Copy(Layout, row, newSquare.State.Data, 0, 4);
                     for (int i = 0; i < newSquare.State.Data.Length; i++)
                         newSquare.State.Data[i] = newSquare.State.Data[i].Skip(column).Take(4).ToArray();
-                    
+
+
+                    newSquare.Original = new State(newSquare.State);
                     Squares.Add(newSquare);
                     index++;
                 }

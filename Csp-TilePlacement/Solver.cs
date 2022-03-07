@@ -84,7 +84,12 @@ namespace Csp_TilePlacement
 
         public Dictionary<string, int> ScanBushes(List<Square> squares)
         {
-            var result = new Dictionary<string, int>();
+            var result = new Dictionary<string, int>(){
+                { "1", 0},
+                { "2", 0},
+                { "3", 0},
+                { "4", 0},
+            };
 
             foreach (var square in squares)
             {
@@ -93,8 +98,6 @@ namespace Csp_TilePlacement
                 {
                     if (result.ContainsKey(key))
                         result[key] += dict[key];
-                    else
-                        result.Add(key, dict[key]);
                 }
             }
 
@@ -109,10 +112,14 @@ namespace Csp_TilePlacement
             foreach (var item in currentBushes.Keys)
             {
                 if (currentBushes[item] < Landscape.Target[item])
+                {
+                    square.Revert();
                     return false;
+                }
+                   
             }
+         
             return true;
-            square.Revert();
         }
 
     }

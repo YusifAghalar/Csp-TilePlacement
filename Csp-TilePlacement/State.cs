@@ -4,11 +4,12 @@
     {
         public State()
         {
-            Data=new int[4][];
+            Data = new int[4][];
         }
         public State(State state)
         {
-          Array.Copy(state.Data,Data,state.Data.Length);
+            Data = new int[4][];
+            Array.Copy(state.Data,Data,state.Data.Length);
         }
         public int[][] Data { get; set; }
         public State Previous { get; set; }
