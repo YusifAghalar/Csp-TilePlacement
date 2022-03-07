@@ -29,6 +29,12 @@ namespace Csp_TilePlacement
             }
             sp.Stop();
             Console.WriteLine(sp.ElapsedMilliseconds);
+            Console.WriteLine(solver.counter);
+
+            foreach (var item in solver.Landscape.Squares)
+            {
+                    item.Print();
+            }
          
 
 

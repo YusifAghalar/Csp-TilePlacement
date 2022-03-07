@@ -10,39 +10,40 @@ namespace Csp_TilePlacement
     {
         public Square()
         {
-            State =  new State();
+            CurrentState =  new State();
         }
         public Square(Square square)
         {
             X= square.X;
             Y= square.Y;
-            Number = square.Number;
-            State = square.State;
-            Original = square.State;
+            Index = square.Index;
+            CurrentState = square.CurrentState;
+            Original = square.Original;
             AssignedTile = new string(square.AssignedTile);
         }
         public int X { get; set; }
         public int Y { get; set; }
-        public int Number { get; set; }
+        public int Index { get; set; }
+        public int NumberOfBushes { get; set; }
         public State Original { get; set; }
-
-        public State State { get; set; }
-     
+        public State CurrentState { get; set; }
         public string AssignedTile { get; set; }
+        public List<string> AvailableTiles {  get; set; }
+
 
         public Dictionary<string, int> Count()
         {
             var result = new Dictionary<string, int>();
 
-            for (int i = 0; i < State.Data.Length; i++)
+            for (int i = 0; i < CurrentState.Data.Length; i++)
             {
-                for (int j = 0; j < State.Data[i].Length; j++)
+                for (int j = 0; j < CurrentState.Data[i].Length; j++)
                 {
-                    if (State.Data[i][j] < 1) continue;
-                    if (result.ContainsKey(State.Data[i][j].ToString()))
-                        result[State.Data[i][j].ToString()]++;
+                    if (CurrentState.Data[i][j] < 1) continue;
+                    if (result.ContainsKey(CurrentState.Data[i][j].ToString()))
+                        result[CurrentState.Data[i][j].ToString()]++;
                     else
-                        result.Add(State.Data[i][j].ToString(), 1);
+                        result.Add(CurrentState.Data[i][j].ToString(), 1);
                 }
             }
 
@@ -59,7 +60,7 @@ namespace Csp_TilePlacement
                 newData[i] = new int[4]; ;
                 for (int j = 0; j < 4; j++)
                 {
-                    newData[i][j] = State.Data[i][j];
+                    newData[i][j] = CurrentState.Data[i][j];
                 }
             }
             switch (tileKey)
@@ -100,13 +101,31 @@ namespace Csp_TilePlacement
 
             AssignedTile = tileKey;
             
-            State = new State() { Data=newData,Previous=State};
+            CurrentState = new State() { Data=newData,Previous=CurrentState};
         }
 
         public void Revert()
         {
-            State = Original;
+            CurrentState = Original;
             AssignedTile = null;
+        }
+
+        public void Print()
+        {
+            foreach (var row in CurrentState.Data)
+            {
+                foreach (var bush in row)
+                {
+                    if(bush>-1)
+                        Console.Write(bush+" ");
+                    else
+                        Console.Write("# ");
+                }
+
+                Console.WriteLine();
+               
+            }
+            Console.WriteLine();
         }
     }
   

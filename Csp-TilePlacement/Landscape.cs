@@ -118,23 +118,24 @@ namespace Csp_TilePlacement
             var row = 0;
             var column = 0;
 
-            var index=1;
+            var index=0;
           
 
             for (row = 0; row < size; row+=4)
             {
                 for (column = 0; column< size; column+=4)
                 {
-                    var newSquare = new Square() { X = row, Y = column, Number = index };
+                    var newSquare = new Square() { X = row, Y = column, Index = index };
 
                     
 
-                    Array.Copy(Layout, row, newSquare.State.Data, 0, 4);
-                    for (int i = 0; i < newSquare.State.Data.Length; i++)
-                        newSquare.State.Data[i] = newSquare.State.Data[i].Skip(column).Take(4).ToArray();
+                    Array.Copy(Layout, row, newSquare.CurrentState.Data, 0, 4);
+                    for (int i = 0; i < newSquare.CurrentState.Data.Length; i++)
+                        newSquare.CurrentState.Data[i] = newSquare.CurrentState.Data[i].Skip(column).Take(4).ToArray();
 
+                    newSquare.Original = new State(newSquare.CurrentState);
+                    newSquare.NumberOfBushes = newSquare.CurrentState.Data.SelectMany(x=>x).Count(x=>x>0);
 
-                    newSquare.Original = new State(newSquare.State);
                     Squares.Add(newSquare);
                     index++;
                 }

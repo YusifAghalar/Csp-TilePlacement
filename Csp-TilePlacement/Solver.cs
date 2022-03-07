@@ -12,6 +12,9 @@ namespace Csp_TilePlacement
         {
             Solution = new Dictionary<string, string>();
             Landscape = landscape;
+
+            //Trick to speed up
+            //Landscape.Squares = Landscape.Squares.OrderBy(x => x.NumberOfBushes).ToList();
         }
 
         public Landscape Landscape { get; }
@@ -28,7 +31,7 @@ namespace Csp_TilePlacement
 
                 return true;
             }
-            if(square==null) return false;
+            if (square == null) return false;
 
 
             foreach (var tileKey in Landscape.AvailableTiles.Keys)
@@ -37,23 +40,23 @@ namespace Csp_TilePlacement
                     continue;
 
 
-                if (IsPossibleToPutTile(tileKey,  square))
+                if (IsPossibleToPutTile(tileKey, square))
                 {
-                  
+
 
                     //Do
                     Landscape.AvailableTiles[tileKey] -= 1;
                     square.PutTile(tileKey);
 
-                    if (Solution.ContainsKey(square.Number.ToString()))
-                        Solution[square.Number.ToString()] = tileKey;
-                    else Solution.Add(square.Number.ToString(), tileKey);
+                    if (Solution.ContainsKey(square.Index.ToString()))
+                        Solution[square.Index.ToString()] = tileKey;
+                    else Solution.Add(square.Index.ToString(), tileKey);
 
                     var nextSquare = Landscape.Squares.FirstOrDefault(x => x.AssignedTile == null);
-                   
-                  
+
+
                     if (Solve(nextSquare)) return true;
-                   
+
 
                     //Backtrack
                     Landscape.AvailableTiles[tileKey] += 1;
@@ -104,7 +107,7 @@ namespace Csp_TilePlacement
             return result;
         }
 
-        public bool IsPossibleToPutTile(string tileName,  Square square)
+        public bool IsPossibleToPutTile(string tileName, Square square)
         {
 
             square.PutTile(tileName);
@@ -116,9 +119,9 @@ namespace Csp_TilePlacement
                     square.Revert();
                     return false;
                 }
-                   
+
             }
-         
+
             return true;
         }
 
