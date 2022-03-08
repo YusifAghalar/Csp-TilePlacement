@@ -19,18 +19,18 @@ namespace Csp_TilePlacement
             {
 
                 Console.WriteLine("Unsolved");
-                Console.WriteLine(solver.counter);
+                Console.WriteLine($"Iterations:{solver.Iterations}");
                 return;
             }
                
 
-            foreach (var key in solver.Solution.Keys.OrderBy(x=>x))
+            foreach (var square in solver.Landscape.Squares.OrderBy(x=>x.Index))
             {
-                Console.WriteLine($"{key} {4} {solver.Solution[key]}");
+                Console.WriteLine($"{square.Index} {4} {square.AssignedTile}");
             }
             sp.Stop();
             Console.WriteLine($"Milliseconds elapsed :{sp.ElapsedMilliseconds}");
-            Console.WriteLine($"Iterations:{solver.counter}");
+            Console.WriteLine($"Iterations:{solver.Iterations}");
 
           
 

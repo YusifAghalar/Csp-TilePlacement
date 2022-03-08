@@ -10,21 +10,21 @@ namespace Csp_TilePlacement
     {
         public Solver(Landscape landscape)
         {
-            Solution = new Dictionary<int, string>();
+        
             Landscape = landscape;
             Heuristics = new Heuristics(landscape.Squares);
         }
 
         public Landscape Landscape { get; }
-        public int counter = 0;
+        public int Iterations = 0;
 
-        public Dictionary<int, string> Solution { get; set; }
+      
         public Heuristics Heuristics { get; set; }
         
         public bool Backtrack(Square square)
         {
-            counter++;
-            if (HasFoundSolution())
+            Iterations++;
+            if (HasFoundSolution()&&Landscape.Squares.Count(x=>x.AssignedTile==null)==0)
             return true;
             
             if (square == null) return false;
@@ -41,9 +41,7 @@ namespace Csp_TilePlacement
                     Landscape.AvailableTiles[tileKey] -= 1;
                     square.PutTile(tileKey);
 
-                    if (Solution.ContainsKey(square.Index))
-                        Solution[square.Index] = tileKey;
-                    else Solution.Add(square.Index, tileKey);
+                   
 
                     var nextSquare = Heuristics.GetMRV();
 
