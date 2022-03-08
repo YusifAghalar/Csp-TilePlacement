@@ -15,7 +15,8 @@ namespace Csp_TilePlacement
         public Dictionary<string, int> AvailableTiles { get; set; }
         public Dictionary<string, int> Target { get; set; }
         public List<Square> Squares { get; set; }
-
+        
+        //Reads text and builds landscape for problem
         public static Landscape Build(string text)
         {
             text = text.Replace("\r", "");
@@ -43,8 +44,6 @@ namespace Csp_TilePlacement
                 }
                 if (cnt == 4)
                     break;
-
-
 
                 var currentSection = sections[cnt];
                 switch (currentSection)
