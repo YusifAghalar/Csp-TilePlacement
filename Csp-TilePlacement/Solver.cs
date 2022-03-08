@@ -29,6 +29,7 @@ namespace Csp_TilePlacement
             
             if (square == null) return false;
 
+            /// Get Least constraning tile type for given square
             foreach (var tileKey in square.GetLCV())
             {
                 if (Landscape.AvailableTiles[tileKey] == 0)
@@ -44,12 +45,12 @@ namespace Csp_TilePlacement
                    
 
                     var nextSquare = Heuristics.GetMRV();
-
                     if (Backtrack(nextSquare)) return true;
 
 
                     //Backtrack
                     Landscape.AvailableTiles[tileKey] += 1;
+                    //Revert changes made
                     square.Revert();
                     
                 }
@@ -72,13 +73,11 @@ namespace Csp_TilePlacement
             return true;
         }
 
-        public void AC3()
-        {
-            
-        }
 
      
-
+        /// <summary>
+        /// Scans all squares and returns current state of whole landscape
+        /// </summary>
         public Dictionary<string, int> ScanBushes(List<Square> squares)
         {
             var result = new Dictionary<string, int>(){
@@ -117,6 +116,11 @@ namespace Csp_TilePlacement
             }
 
             return true;
+        }
+
+        public void AC3()
+        {
+
         }
 
     }
