@@ -10,31 +10,26 @@ namespace Csp_TilePlacement
     {
         public Solver(Landscape landscape)
         {
-            Solution = new Dictionary<string, string>();
+            Solution = new Dictionary<int, string>();
             Landscape = landscape;
-
-            //Trick to speed up
-            //Landscape.Squares = Landscape.Squares.OrderBy(x => x.NumberOfBushes).ToList();
+            Heuristics = new Heuristics(landscape.Squares);
         }
 
         public Landscape Landscape { get; }
         public int counter = 0;
 
-        public Dictionary<string, string> Solution { get; set; }
-
-
-        public bool Solve(Square square)
+        public Dictionary<int, string> Solution { get; set; }
+        public Heuristics Heuristics { get; set; }
+        
+        public bool Backtrack(Square square)
         {
             counter++;
             if (HasFoundSolution())
-            {
-
-                return true;
-            }
+            return true;
+            
             if (square == null) return false;
 
-
-            foreach (var tileKey in Landscape.AvailableTiles.Keys)
+            foreach (var tileKey in square.GetLCV())
             {
                 if (Landscape.AvailableTiles[tileKey] == 0)
                     continue;
@@ -42,29 +37,24 @@ namespace Csp_TilePlacement
 
                 if (IsPossibleToPutTile(tileKey, square))
                 {
-
-
                     //Do
                     Landscape.AvailableTiles[tileKey] -= 1;
                     square.PutTile(tileKey);
 
-                    if (Solution.ContainsKey(square.Index.ToString()))
-                        Solution[square.Index.ToString()] = tileKey;
-                    else Solution.Add(square.Index.ToString(), tileKey);
+                    if (Solution.ContainsKey(square.Index))
+                        Solution[square.Index] = tileKey;
+                    else Solution.Add(square.Index, tileKey);
 
-                    var nextSquare = Landscape.Squares.FirstOrDefault(x => x.AssignedTile == null);
+                    var nextSquare = Heuristics.GetMRV();
 
-
-                    if (Solve(nextSquare)) return true;
+                    if (Backtrack(nextSquare)) return true;
 
 
                     //Backtrack
                     Landscape.AvailableTiles[tileKey] += 1;
                     square.Revert();
-
-
+                    
                 }
-
 
             }
 
@@ -73,17 +63,23 @@ namespace Csp_TilePlacement
 
         public bool HasFoundSolution()
         {
-            var currentColors = ScanBushes(Landscape.Squares);
+            var currentBushes = ScanBushes(Landscape.Squares);
 
-            foreach (var item in currentColors.Keys)
+            foreach (var item in currentBushes.Keys)
             {
-                if (currentColors[item] != Landscape.Target[item])
+                if (currentBushes[item] != Landscape.Target[item])
                     return false;
             }
 
             return true;
         }
 
+        public void AC3()
+        {
+            
+        }
+
+     
 
         public Dictionary<string, int> ScanBushes(List<Square> squares)
         {
@@ -96,7 +92,7 @@ namespace Csp_TilePlacement
 
             foreach (var square in squares)
             {
-                var dict = square.Count();
+                var dict = square.ScanSquare();
                 foreach (var key in dict.Keys)
                 {
                     if (result.ContainsKey(key))

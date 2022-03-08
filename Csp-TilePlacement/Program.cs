@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 
 namespace Csp_TilePlacement
 {
@@ -7,13 +8,13 @@ namespace Csp_TilePlacement
         static void Main(string[] args)
         {
 
-
+            Console.WriteLine("Solving....");
             var sp = new Stopwatch();
             sp.Start();
           
             var landscape = Landscape.Build(File.ReadAllText(args[0]));
             var solver= new Solver(landscape);
-            var result = solver.Solve(landscape.Squares.FirstOrDefault());
+            var result = solver.Backtrack(solver.Heuristics.GetMRV());
             if (!result)
             {
 
@@ -23,20 +24,15 @@ namespace Csp_TilePlacement
             }
                
 
-            foreach (var key in solver.Solution.Keys)
+            foreach (var key in solver.Solution.Keys.OrderBy(x=>x))
             {
-                Console.WriteLine($"{key} {solver.Solution[key]}");
+                Console.WriteLine($"{key} {4} {solver.Solution[key]}");
             }
             sp.Stop();
-            Console.WriteLine(sp.ElapsedMilliseconds);
-            Console.WriteLine(solver.counter);
+            Console.WriteLine($"Milliseconds elapsed :{sp.ElapsedMilliseconds}");
+            Console.WriteLine($"Iterations:{solver.counter}");
 
-            foreach (var item in solver.Landscape.Squares)
-            {
-                    item.Print();
-            }
-         
-
+          
 
             
         }

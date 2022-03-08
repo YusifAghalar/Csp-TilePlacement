@@ -11,6 +11,8 @@ namespace Csp_TilePlacement
         public Square()
         {
             CurrentState =  new State();
+            
+            
         }
         public Square(Square square)
         {
@@ -29,9 +31,10 @@ namespace Csp_TilePlacement
         public State CurrentState { get; set; }
         public string AssignedTile { get; set; }
         public List<string> AvailableTiles {  get; set; }
+        public Dictionary<string,int> CountOfAllBushesAfterTile {  get; set; }
 
 
-        public Dictionary<string, int> Count()
+        public Dictionary<string, int> ScanSquare()
         {
             var result = new Dictionary<string, int>();
 
@@ -110,23 +113,55 @@ namespace Csp_TilePlacement
             AssignedTile = null;
         }
 
-        public void Print()
+        
+        public List<string> GetLCV()
         {
-            foreach (var row in CurrentState.Data)
-            {
-                foreach (var bush in row)
-                {
-                    if(bush>-1)
-                        Console.Write(bush+" ");
-                    else
-                        Console.Write("# ");
-                }
+            PutTile("EL_SHAPE");
+            var el_shape = CurrentState.Data.SelectMany(x => x).Count(x => x > 0);
+            Revert();
 
-                Console.WriteLine();
-               
+            PutTile("OUTER_BOUNDARY");
+            var outer_body = CurrentState.Data.SelectMany(x => x).Count(x => x > 0);
+            Revert();
+
+
+            if (el_shape < outer_body)
+            {
+                return new List<string>()
+                {
+                    "EL_SHAPE",
+                    "OUTER_BOUNDARY",
+                    "FULL_BLOCK"
+                };
             }
-            Console.WriteLine();
+
+            return new List<string>()
+            {
+                "OUTER_BOUNDARY",
+                "EL_SHAPE",
+                "FULL_BLOCK"
+
+            };
+
         }
-    }
-  
+
+    
+        public void Print()
+            {
+                foreach (var row in CurrentState.Data)
+                {
+                    foreach (var bush in row)
+                    {
+                        if(bush>-1)
+                            Console.Write(bush+" ");
+                        else
+                            Console.Write("# ");
+                    }
+                    Console.WriteLine();
+                   
+                }
+                Console.WriteLine();
+            }
+        }
+      
 }
